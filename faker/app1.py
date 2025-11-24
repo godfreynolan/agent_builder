@@ -1,123 +1,140 @@
-import csv
-import random
-from datetime import datetime, timedelta
-from faker import Faker
+import sqlite3
+import pandas as pd
+from pathlib import Path
 
-fake = Faker()
+# -----------------------
+# FILE PATHS
+# -----------------------
+PLANS_FILE = "r_mobile_plans.xlsx"
+CUSTOMERS_FILE = "r_mobile_customers.csv"
+CALLS_FILE = "r_mobile_call_records.csv"
+DB_FILE = "r_mobile.db"
 
-# -----------------------------------
-# CONFIG
-# -----------------------------------
-CUSTOMER_CSV = "r_mobile_customers.csv"
-CALL_RECORD_CSV = "r_mobile_call_records.csv"
 
-MIN_CALLS_PER_CUSTOMER = 20
-MAX_CALLS_PER_CUSTOMER = 80
+def load_data():
+    plans_df = pd.read_excel(PLANS_FILE)
+    customers_df = pd.read_csv(CUSTOMERS_FILE)
+    calls_df = pd.read_csv(CALLS_FILE)
+    return plans_df, customers_df, calls_df
 
-# Generate calls in the last N days
-DAYS_BACK = 60
 
-# -----------------------------------
-# HELPERS
-# -----------------------------------
+def create_connection(db_file):
+    conn = sqlite3.connect(db_file)
+    # Enable foreign keys
+    conn.execute("PRAGMA foreign_keys = ON;")
+    return conn
 
-def load_customers(csv_path):
-    """Load customers from the R-Mobile customers CSV."""
-    customers = []
-    with open(csv_path, newline="") as f:
-        reader = csv.DictReader(f)
-        for row in reader:
-            customers.append(row)
-    return customers
 
-def random_call_datetime(days_back=DAYS_BACK):
-    """Return a random datetime within the last `days_back` days."""
-    now = datetime.now()
-    start = now - timedelta(days=days_back)
-    # Random number of seconds between start and now
-    random_seconds = random.randint(0, int((now - start).total_seconds()))
-    return start + timedelta(seconds=random_seconds)
+def create_tables(conn):
+    cur = conn.cursor()
 
-def generate_call_record(call_id, customer):
-    """
-    Generate a single fake call record for a given customer.
-    Assumes customer has 'customer_id' and 'phone_number' fields.
-    """
-    call_time = random_call_datetime()
+    # Drop tables if they already exist (optional, for clean reruns)
+    cur.execute("DROP TABLE IF EXISTS call_records;")
+    cur.execute("DROP TABLE IF EXISTS customers;")
+    cur.execute("DROP TABLE IF EXISTS plans;")
 
-    # Call duration in seconds (0 for missed)
-    is_missed = random.random() < 0.1  # 10% missed calls
-    duration_seconds = 0 if is_missed else random.randint(10, 3600)  # up to 1 hour
+    # plans table
+    cur.execute(
+        """
+        CREATE TABLE plans (
+            plan_id INTEGER PRIMARY KEY,
+            plan_name TEXT UNIQUE NOT NULL,
+            plan_type TEXT,
+            monthly_price_usd REAL,
+            data_gb INTEGER,
+            talk_minutes INTEGER,
+            text_messages INTEGER,
+            hotspot_data_gb INTEGER,
+            international_minutes INTEGER,
+            roaming_data_gb INTEGER,
+            overage_per_gb_usd REAL,
+            contract_length_months INTEGER
+        );
+        """
+    )
 
-    # Call type
-    call_type = random.choices(
-        population=["outgoing", "incoming", "missed"],
-        weights=[0.5, 0.4, 0.1],
-        k=1
-    )[0]
+    # customers table
+    cur.execute(
+        """
+        CREATE TABLE customers (
+            customer_id INTEGER PRIMARY KEY,
+            full_name TEXT,
+            email TEXT,
+            phone_number TEXT,
+            address TEXT,
+            plan_id INTEGER,
+            monthly_cost REAL,
+            data_limit_gb REAL,
+            data_used_gb REAL,
+            minutes_used INTEGER,
+            text_messages INTEGER,
+            is_over_data INTEGER,
+            FOREIGN KEY (plan_id) REFERENCES plans(plan_id)
+        );
+        """
+    )
 
-    # Basic roaming flag (small percentage of roaming calls)
-    is_roaming = random.random() < 0.05
+    # call_records table
+    cur.execute(
+        """
+        CREATE TABLE call_records (
+            call_id INTEGER PRIMARY KEY,
+            customer_id INTEGER NOT NULL,
+            customer_phone TEXT,
+            other_party_phone TEXT,
+            call_type TEXT,
+            start_time TEXT,
+            duration_seconds INTEGER,
+            is_missed INTEGER,
+            is_roaming INTEGER,
+            cell_tower_city TEXT,
+            cell_tower_country TEXT,
+            cost_usd REAL,
+            FOREIGN KEY (customer_id) REFERENCES customers(customer_id)
+        );
+        """
+    )
 
-    # Cost (very rough model)
-    # e.g. 0.01 per second domestic, 0.03 per second roaming, none if missed
-    if is_missed:
-        cost = 0.0
-    else:
-        rate = 0.03 if is_roaming else 0.01
-        cost = round(duration_seconds * rate, 2)
+    conn.commit()
 
-    record = {
-        "call_id": call_id,
-        "customer_id": customer["customer_id"],
-        "customer_phone": customer["phone_number"],
-        "other_party_phone": fake.phone_number(),
-        "call_type": call_type,             # incoming / outgoing / missed
-        "start_time": call_time.isoformat(sep=" ", timespec="seconds"),
-        "duration_seconds": duration_seconds,
-        "is_missed": is_missed,
-        "is_roaming": is_roaming,
-        "cell_tower_city": fake.city(),
-        "cell_tower_country": fake.country(),
-        "cost_usd": cost,
-    }
-    return record
 
-def generate_call_records(customers):
-    """Generate a list of call records for all customers."""
-    call_records = []
-    call_id = 1
+def insert_plans(conn, plans_df):
+    cur = conn.cursor()
+    rows = [
+        (
+            int(row["plan_id"]),
+            row["plan_name"],
+            row.get("plan_type"),
+            float(row.get("monthly_price_usd", 0) or 0),
+            int(row.get("data_gb", 0) or 0),
+            int(row.get("talk_minutes", 0) or 0),
+            int(row.get("text_messages", 0) or 0),
+            int(row.get("hotspot_data_gb", 0) or 0),
+            int(row.get("international_minutes", 0) or 0),
+            int(row.get("roaming_data_gb", 0) or 0),
+            float(row.get("overage_per_gb_usd", 0) or 0),
+            int(row.get("contract_length_months", 0) or 0),
+        )
+        for _, row in plans_df.iterrows()
+    ]
 
-    for customer in customers:
-        num_calls = random.randint(MIN_CALLS_PER_CUSTOMER, MAX_CALLS_PER_CUSTOMER)
-        for _ in range(num_calls):
-            record = generate_call_record(call_id, customer)
-            call_records.append(record)
-            call_id += 1
+    cur.executemany(
+        """
+        INSERT INTO plans (
+            plan_id, plan_name, plan_type, monthly_price_usd,
+            data_gb, talk_minutes, text_messages,
+            hotspot_data_gb, international_minutes, roaming_data_gb,
+            overage_per_gb_usd, contract_length_months
+        )
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+        """,
+        rows,
+    )
+    conn.commit()
 
-    return call_records
 
-def save_call_records(call_records, filename=CALL_RECORD_CSV):
-    """Save call records to CSV."""
-    if not call_records:
-        print("No call records to save.")
-        return
+def insert_customers(conn, plans_df, customers_df):
+    cur = conn.cursor()
 
-    with open(filename, "w", newline="") as f:
-        writer = csv.DictWriter(f, fieldnames=call_records[0].keys())
-        writer.writeheader()
-        writer.writerows(call_records)
-
-# -----------------------------------
-# MAIN
-# -----------------------------------
-
-if __name__ == "__main__":
-    customers = load_customers(CUSTOMER_CSV)
-    print(f"Loaded {len(customers)} customers.")
-
-    call_records = generate_call_records(customers)
-    print(f"Generated {len(call_records)} call records.")
-
-    save_call_records(call_records)
-    print(f"Saved call records to {CALL_RECORD_CSV}.")
+    # Map plan_name -> plan_id from the plans sheet
+    plan
