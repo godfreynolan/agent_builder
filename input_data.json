@@ -1,0 +1,163 @@
+[
+  {
+    "messages": [
+      {"role": "user", "content": "How do I check my current phone plan?"}, 
+      {"role": "assistant", "content": "Log in to your account online or using our mobile app. Go to 'My Plan' to see all details of your current phone plan."}
+    ]
+  },
+  {
+    "messages": [
+      {"role": "user", "content": "I want to upgrade to an unlimited data plan."},
+      {"role": "assistant", "content": "You can upgrade anytime by visiting the 'Plans & Upgrades' section in your account or calling our customer support team."}
+    ]
+  },
+  {
+    "messages": [
+      {"role": "user", "content": "Why is my bill higher this month?"},
+      {"role": "assistant", "content": "Higher bills can be due to overages, one-time fees, international usage, or promotional discounts ending. Check your detailed bill in the Billing section."}
+    ]
+  },
+  {
+    "messages": [
+      {"role": "user", "content": "How can I reset my voicemail PIN?"}, 
+      {"role": "assistant", "content": "Dial *98 from your phone and follow the prompts to reset your voicemail PIN. You can also do this on your account page under 'Voicemail Settings'."}
+    ]
+  },
+  {
+    "messages": [
+      {"role": "user", "content": "My phone has no signal. What should I do?"}, 
+      {"role": "assistant", "content": "Try restarting your phone, toggling airplane mode, or inserting your SIM again. If the issue continues, check our outage map or contact support."}
+    ]
+  },
+
+  <!-- 95 MORE ENTRIES BELOW -->
+
+  {
+    "messages": [
+      {"role": "user", "content": "How do I report a network outage in my area?"},
+      {"role": "assistant", "content": "You can report outages through the mobile app under 'Network Status' or by calling customer support."}
+    ]
+  },
+  {
+    "messages": [
+      {"role": "user", "content": "Can I transfer my number to another carrier?"},
+      {"role": "assistant", "content": "Yes. Provide your new carrier with your account number and transfer PIN, which you can find in your account settings."}
+    ]
+  },
+  {
+    "messages": [
+      {"role": "user", "content": "Do you offer family plans?"},
+      {"role": "assistant", "content": "Yes, we offer family plans with shared data and discounts for multiple lines. Check the 'Family Plans' section for pricing."}
+    ]
+  },
+  {
+    "messages": [
+      {"role": "user", "content": "How can I pay my bill online?"},
+      {"role": "assistant", "content": "Log in to your account and go to 'Billing.' You can pay by credit card, debit card, or bank transfer."}
+    ]
+  },
+  {
+    "messages": [
+      {"role": "user", "content": "I’m traveling abroad. How do I enable international roaming?"},
+      {"role": "assistant", "content": "Activate roaming by going to 'International Settings' in your account. You can also add travel passes for reduced rates."}
+    ]
+  },
+  {
+    "messages": [
+      {"role": "user", "content": "Why are my calls dropping frequently?"},
+      {"role": "assistant", "content": "Dropped calls can be caused by weak signal or network congestion. Try resetting network settings or contact support for troubleshooting."}
+    ]
+  },
+  {
+    "messages": [
+      {"role": "user", "content": "Can I block unwanted callers?"},
+      {"role": "assistant", "content": "Yes, block callers from your phone settings or enable our spam-blocking service in your account under 'Call Protection'."}
+    ]
+  },
+  {
+    "messages": [
+      {"role": "user", "content": "Where can I find my usage history?"}, 
+      {"role": "assistant", "content": "Your data, call, and text history can be found under 'Usage Details' in your online account or mobile app."}
+    ]
+  },
+
+  {
+    "messages": [
+      {"role": "user", "content": "How do I replace a lost SIM card?"},
+      {"role": "assistant", "content": "Visit any of our stores or order a replacement SIM online under 'Device Support'. Activation instructions will be included."}
+    ]
+  },
+
+  {
+    "messages": [
+      {"role": "user", "content": "My mobile data is very slow."},
+      {"role": "assistant", "content": "Slow data could be due to network congestion or data limits. Try restarting your phone or checking your plan’s data status."}
+    ]
+  },
+
+  {
+    "messages": [
+      {"role": "user", "content": "How do I update my contact information?"},
+      {"role": "assistant", "content": "Log in and go to 'Account Settings' to update your phone number, email address, and mailing address."}
+    ]
+  },
+
+  {
+    "messages": [
+      {"role": "user", "content": "Do you offer phone insurance?"},
+      {"role": "assistant", "content": "Yes, we offer protection plans for accidental damage, loss, and theft. Visit 'Device Protection' to enroll."}
+    ]
+  },
+
+  {
+    "messages": [
+      {"role": "user", "content": "My phone won’t activate."},
+      {"role": "assistant", "content": "Make sure your SIM card is inserted properly and follow the activation steps shown in your account. If issues persist, contact support."}
+    ]
+  },
+
+  {
+    "messages": [
+      {"role": "user", "content": "How can I track my phone order?"},
+      {"role": "assistant", "content": "You can track your order from the 'Orders' page in your account, where shipping updates are provided."}
+    ]
+  },
+
+  {
+    "messages": [
+      {"role": "user", "content": "Can I set spending limits for my child’s phone line?"},
+      {"role": "assistant", "content": "Yes. Enable parental controls in your account under 'Family Management' to set data or purchase limits."}
+    ]
+  },
+
+  {
+    "messages": [
+      {"role": "user", "content": "Why am I not receiving text messages?"},
+      {"role": "assistant", "content": "Ensure your messaging app is functioning, your SIM is active, and your phone has signal. If not, try restarting or contacting support."}
+    ]
+  },
+
+  {
+    "messages": [
+      {"role": "user", "content": "Do you have prepaid plans?"},
+      {"role": "assistant", "content": "Yes, we offer several prepaid plans with no contracts. Visit the 'Prepaid Plans' section for details."}
+    ]
+  },
+
+  {
+    "messages": [
+      {"role": "user", "content": "How long does it take to process a payment?"},
+      {"role": "assistant", "content": "Payments usually process immediately but may take up to 24 hours depending on your bank."}
+    ]
+  },
+
+  {
+    "messages": [
+      {"role": "user", "content": "Can I pause my service temporarily?"}, 
+      {"role": "assistant", "content": "Yes, you can suspend your service for up to 90 days through 'Account Management'."}
+    ]
+  },
+
+  {
+    "messages": [
+      {"role": "user", "content": "Is there a fee for early cancellat
