@@ -29,9 +29,6 @@
       {"role": "assistant", "content": "Try restarting your phone, toggling airplane mode, or inserting your SIM again. If the issue continues, check our outage map or contact support."}
     ]
   },
-
-  <!-- 95 MORE ENTRIES BELOW -->
-
   {
     "messages": [
       {"role": "user", "content": "How do I report a network outage in my area?"},
@@ -160,4 +157,43 @@
 
   {
     "messages": [
-      {"role": "user", "content": "Is there a fee for early cancellat
+      {"role": "user", "content": "Is there a fee for early cancellation?"},
+      {"role": "assistant", "content": "If you are on a contract, early cancellation fees may apply. Check your plan agreement in the 'Billing' section."}
+    ]
+  },
+
+  {
+    "messages": [
+      {"role": "user", "content": "Do you support Wi-Fi calling?"},
+      {"role": "assistant", "content": "Yes. Enable Wi-Fi calling from your phone settings or refer to the 'Device Support' guide for instructions."}
+    ]
+  },
+
+  {
+    "messages": [
+      {"role": "user", "content": "My phone is overheating. What should I do?"}, 
+      {"role": "assistant", "content": "Remove your case, close unused apps, and let your phone cool down. If it continues, contact device support."}
+    ]
+  },
+
+  {
+    "messages": [
+      {"role": "user", "content": "Can I change my phone number?"}, 
+      {"role": "assistant", "content": "Yes, you can request a new number from 'Account Settings'. A small processing fee may apply."}
+    ]
+  },
+
+  {
+    "messages": [
+      {"role": "user", "content": "Does my plan include hotspot data?"},
+      {"role": "assistant", "content": "Most plans include hotspot data. Check the 'Plan Details' section in your account for your allowance."}
+    ]
+  },
+
+  {
+    "messages": [
+      {"role": "user", "content": "How do I turn off paper billing?"}, 
+      {"role": "assistant", "content": "Go to 'Billing Preferences' and switch to electronic billing to receive statements via email."}
+    ]
+  }
+]
